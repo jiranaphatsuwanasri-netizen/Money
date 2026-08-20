@@ -1,0 +1,1359 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MoneyPlan - วางแผนการเงิน</title>
+
+    <!-- Bootstrap 5 -->
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+
+    <!-- Bootstrap Icons -->
+    <link
+        rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    >
+
+    <style>
+        :root {
+            --bg-main: #080b10;
+            --bg-card: #10151d;
+            --bg-card-2: #151c26;
+            --blue: #0d6efd;
+            --blue-light: #3d9bff;
+            --border: rgba(255,255,255,.08);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg-main);
+            color: #fff;
+            font-family: "Segoe UI", Tahoma, sans-serif;
+        }
+
+        .navbar {
+            background: #0a0f16;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            letter-spacing: .5px;
+        }
+
+        .brand-icon {
+            width: 38px;
+            height: 38px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--blue);
+            border-radius: 10px;
+            margin-right: 8px;
+        }
+
+        .hero {
+            padding: 40px 0 25px;
+        }
+
+        .hero h1 {
+            font-weight: 700;
+        }
+
+        .hero span {
+            color: var(--blue-light);
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            color: #fff;
+        }
+
+        .card-header {
+            background: transparent;
+            border-bottom: 1px solid var(--border);
+            font-weight: 600;
+        }
+
+        .stat-card {
+            min-height: 150px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(13,110,253,.15);
+            color: var(--blue-light);
+            border-radius: 12px;
+            font-size: 22px;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            margin-top: 12px;
+        }
+
+        .stat-label {
+            color: #8f9baa;
+            font-size: 14px;
+        }
+
+        .form-control,
+        .form-select {
+            background: #0c1118;
+            border: 1px solid #263140;
+            color: #fff;
+            border-radius: 10px;
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            background: #0c1118;
+            color: #fff;
+            border-color: var(--blue);
+            box-shadow: 0 0 0 .2rem rgba(13,110,253,.15);
+        }
+
+        .form-control::placeholder {
+            color: #687383;
+        }
+
+        .form-label {
+            color: #cbd3dc;
+            font-size: 14px;
+        }
+
+        .btn {
+            border-radius: 10px;
+        }
+
+        .progress {
+            background: #242c36;
+            height: 12px;
+            border-radius: 20px;
+        }
+
+        .progress-bar {
+            border-radius: 20px;
+        }
+
+        .goal-box {
+            background: var(--bg-card-2);
+            border-radius: 14px;
+            padding: 20px;
+        }
+
+        .recommend-box {
+            background: linear-gradient(
+                135deg,
+                rgba(13,110,253,.18),
+                rgba(13,110,253,.03)
+            );
+            border: 1px solid rgba(13,110,253,.3);
+            border-radius: 14px;
+            padding: 20px;
+        }
+
+        .recommend-number {
+            color: var(--blue-light);
+            font-size: 34px;
+            font-weight: 700;
+        }
+
+        .table {
+            --bs-table-bg: transparent;
+            --bs-table-color: #fff;
+            --bs-table-border-color: var(--border);
+        }
+
+        .table th {
+            color: #8995a3;
+            font-size: 13px;
+        }
+
+        .empty-history {
+            color: #6f7b89;
+            text-align: center;
+            padding: 30px 10px;
+        }
+
+        footer {
+            color: #687383;
+            padding: 35px 0;
+        }
+
+        .blue-text {
+            color: var(--blue-light);
+        }
+
+        .danger-text {
+            color: #ff6675;
+        }
+
+        .success-text {
+            color: #35d07f;
+        }
+
+        .warning-text {
+            color: #ffc107;
+        }
+
+        @media (max-width: 576px) {
+            .hero {
+                padding-top: 25px;
+            }
+
+            .hero h1 {
+                font-size: 28px;
+            }
+
+            .stat-value {
+                font-size: 23px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+    <div class="container">
+        <a class="navbar-brand" href="#">
+            <span class="brand-icon">
+                <i class="bi bi-wallet2"></i>
+            </span>
+            MoneyPlan
+        </a>
+
+        <span class="navbar-text text-secondary small">
+            Personal Finance Planner
+        </span>
+    </div>
+</nav>
+
+
+<div class="container">
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1>
+                    วางแผนเงินของคุณ
+                    <span>ให้ง่ายขึ้น</span>
+                </h1>
+
+                <p class="text-secondary mb-0">
+                    คำนวณงบใช้จ่ายและเงินออม เพื่อให้ไปถึงเป้าหมายได้ตามแผน
+                </p>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- INPUT -->
+    <div class="card mb-4">
+        <div class="card-header py-3">
+            <i class="bi bi-calculator me-2 blue-text"></i>
+            ข้อมูลทางการเงิน
+        </div>
+
+        <div class="card-body">
+
+            <div class="row g-3">
+
+                <!-- Weekly income -->
+                <div class="col-md-6 col-lg-3">
+                    <label class="form-label">
+                        <i class="bi bi-cash-stack me-1"></i>
+                        รายรับต่อสัปดาห์
+                    </label>
+
+                    <div class="input-group">
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="weeklyIncome"
+                            placeholder="เช่น 3000"
+                            min="0"
+                        >
+                        <span class="input-group-text bg-dark text-secondary">
+                            บาท
+                        </span>
+                    </div>
+                </div>
+
+
+                <!-- Daily expense -->
+                <div class="col-md-6 col-lg-3">
+                    <label class="form-label">
+                        <i class="bi bi-cart3 me-1"></i>
+                        รายจ่ายต่อวัน
+                    </label>
+
+                    <div class="input-group">
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="dailyExpense"
+                            placeholder="เช่น 200"
+                            min="0"
+                        >
+                        <span class="input-group-text bg-dark text-secondary">
+                            บาท
+                        </span>
+                    </div>
+                </div>
+
+
+                <!-- Goal price -->
+                <div class="col-md-6 col-lg-3">
+                    <label class="form-label">
+                        <i class="bi bi-bullseye me-1"></i>
+                        ราคาของที่อยากซื้อ
+                    </label>
+
+                    <div class="input-group">
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="goalAmount"
+                            placeholder="เช่น 10000"
+                            min="0"
+                        >
+                        <span class="input-group-text bg-dark text-secondary">
+                            บาท
+                        </span>
+                    </div>
+                </div>
+
+
+                <!-- Current saving -->
+                <div class="col-md-6 col-lg-3">
+                    <label class="form-label">
+                        <i class="bi bi-piggy-bank me-1"></i>
+                        เงินที่มีอยู่แล้ว
+                    </label>
+
+                    <div class="input-group">
+                        <input
+                            type="number"
+                            class="form-control"
+                            id="currentSaving"
+                            placeholder="เช่น 2000"
+                            min="0"
+                        >
+                        <span class="input-group-text bg-dark text-secondary">
+                            บาท
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <hr class="border-secondary my-4">
+
+
+            <div class="row g-3">
+
+                <!-- Target days -->
+                <div class="col-md-6">
+                    <label class="form-label">
+                        <i class="bi bi-calendar-event me-1"></i>
+                        ต้องการซื้อภายในกี่วัน
+                    </label>
+
+                    <input
+                        type="number"
+                        class="form-control"
+                        id="targetDays"
+                        placeholder="เช่น 30"
+                        min="1"
+                    >
+                </div>
+
+
+                <div class="col-md-6 d-flex align-items-end">
+                    <button
+                        class="btn btn-primary w-100 py-2"
+                        onclick="calculate()"
+                    >
+                        <i class="bi bi-lightning-charge-fill me-1"></i>
+                        คำนวณแผนการเงิน
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- STATS -->
+    <div class="row g-3 mb-4">
+
+        <div class="col-6 col-lg-3">
+            <div class="card stat-card p-3">
+                <div class="stat-icon">
+                    <i class="bi bi-wallet2"></i>
+                </div>
+
+                <div class="stat-value" id="weeklyIncomeResult">
+                    ฿0
+                </div>
+
+                <div class="stat-label">
+                    รายรับต่อสัปดาห์
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-6 col-lg-3">
+            <div class="card stat-card p-3">
+                <div class="stat-icon">
+                    <i class="bi bi-calendar-day"></i>
+                </div>
+
+                <div class="stat-value blue-text" id="dailyBudget">
+                    ฿0
+                </div>
+
+                <div class="stat-label">
+                    งบใช้ต่อวัน
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-6 col-lg-3">
+            <div class="card stat-card p-3">
+                <div class="stat-icon">
+                    <i class="bi bi-piggy-bank"></i>
+                </div>
+
+                <div class="stat-value success-text" id="dailySaving">
+                    ฿0
+                </div>
+
+                <div class="stat-label">
+                    ควรเก็บต่อวัน
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-6 col-lg-3">
+            <div class="card stat-card p-3">
+                <div class="stat-icon">
+                    <i class="bi bi-hourglass-split"></i>
+                </div>
+
+                <div class="stat-value warning-text" id="remainingDays">
+                    0 วัน
+                </div>
+
+                <div class="stat-label">
+                    ระยะเวลาเป้าหมาย
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- CALCULATION -->
+    <div class="row g-4 mb-4">
+
+        <!-- Daily plan -->
+        <div class="col-lg-7">
+
+            <div class="card h-100">
+
+                <div class="card-header py-3">
+                    <i class="bi bi-bar-chart-line me-2 blue-text"></i>
+                    แผนการใช้เงิน
+                </div>
+
+                <div class="card-body">
+
+                    <div class="recommend-box mb-3">
+
+                        <div class="small text-secondary">
+                            คุณควรใช้เงินได้ไม่เกิน
+                        </div>
+
+                        <div class="recommend-number" id="recommendedDaily">
+                            ฿0 / วัน
+                        </div>
+
+                        <div class="small text-secondary">
+                            หลังจากกันเงินสำหรับเป้าหมายแล้ว
+                        </div>
+
+                    </div>
+
+
+                    <div class="row g-3">
+
+                        <div class="col-6">
+                            <div class="goal-box">
+                                <small class="text-secondary">
+                                    รายรับเฉลี่ยต่อวัน
+                                </small>
+
+                                <h4 class="mt-2" id="incomePerDay">
+                                    ฿0
+                                </h4>
+                            </div>
+                        </div>
+
+
+                        <div class="col-6">
+                            <div class="goal-box">
+                                <small class="text-secondary">
+                                    รายจ่ายที่ตั้งไว้
+                                </small>
+
+                                <h4 class="mt-2" id="expensePerDay">
+                                    ฿0
+                                </h4>
+                            </div>
+                        </div>
+
+
+                        <div class="col-6">
+                            <div class="goal-box">
+                                <small class="text-secondary">
+                                    เงินเหลือต่อสัปดาห์
+                                </small>
+
+                                <h4 class="mt-2" id="weeklyRemaining">
+                                    ฿0
+                                </h4>
+                            </div>
+                        </div>
+
+
+                        <div class="col-6">
+                            <div class="goal-box">
+                                <small class="text-secondary">
+                                    เงินเหลือต่อเดือนโดยประมาณ
+                                </small>
+
+                                <h4 class="mt-2" id="monthlySaving">
+                                    ฿0
+                                </h4>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Goal -->
+        <div class="col-lg-5">
+
+            <div class="card h-100">
+
+                <div class="card-header py-3">
+                    <i class="bi bi-bullseye me-2 blue-text"></i>
+                    เป้าหมายการออม
+                </div>
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-secondary">
+                            เป้าหมาย
+                        </span>
+
+                        <strong id="goalResult">
+                            ฿0
+                        </strong>
+                    </div>
+
+
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-secondary">
+                            เงินที่มีแล้ว
+                        </span>
+
+                        <strong id="savingResult">
+                            ฿0
+                        </strong>
+                    </div>
+
+
+                    <div class="d-flex justify-content-between mb-3">
+                        <span class="text-secondary">
+                            เหลืออีก
+                        </span>
+
+                        <strong
+                            class="blue-text"
+                            id="goalRemaining"
+                        >
+                            ฿0
+                        </strong>
+                    </div>
+
+
+                    <div class="progress mb-3">
+                        <div
+                            class="progress-bar"
+                            id="goalProgress"
+                            style="width:0%"
+                        ></div>
+                    </div>
+
+
+                    <div class="text-center">
+
+                        <div class="small text-secondary">
+                            ความคืบหน้า
+                        </div>
+
+                        <h3 id="progressText">
+                            0%
+                        </h3>
+
+                    </div>
+
+
+                    <hr class="border-secondary">
+
+
+                    <div class="text-center">
+
+                        <div class="small text-secondary">
+                            ควรเก็บเงินอย่างน้อย
+                        </div>
+
+                        <h2 class="success-text" id="savingPerDay">
+                            ฿0 / วัน
+                        </h2>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ADD TRANSACTION -->
+    <div class="card mb-4">
+
+        <div class="card-header py-3">
+            <i class="bi bi-plus-circle me-2 blue-text"></i>
+            เพิ่มรายการ
+        </div>
+
+        <div class="card-body">
+
+            <div class="row g-3">
+
+                <div class="col-md-3">
+
+                    <label class="form-label">
+                        ประเภท
+                    </label>
+
+                    <select
+                        class="form-select"
+                        id="transactionType"
+                    >
+                        <option value="expense">
+                            รายจ่าย
+                        </option>
+
+                        <option value="income">
+                            รายรับ
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="col-md-3">
+
+                    <label class="form-label">
+                        รายการ
+                    </label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="transactionName"
+                        placeholder="เช่น ค่าอาหาร"
+                    >
+
+                </div>
+
+
+                <div class="col-md-3">
+
+                    <label class="form-label">
+                        จำนวนเงิน
+                    </label>
+
+                    <input
+                        type="number"
+                        class="form-control"
+                        id="transactionAmount"
+                        placeholder="0"
+                        min="0"
+                    >
+
+                </div>
+
+
+                <div class="col-md-3 d-flex align-items-end">
+
+                    <button
+                        class="btn btn-primary w-100"
+                        onclick="addTransaction()"
+                    >
+                        <i class="bi bi-plus-lg"></i>
+                        เพิ่มรายการ
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- HISTORY -->
+    <div class="card mb-4">
+
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+
+            <span>
+                <i class="bi bi-clock-history me-2 blue-text"></i>
+                ประวัติรายการ
+            </span>
+
+            <button
+                class="btn btn-sm btn-outline-danger"
+                onclick="clearHistory()"
+            >
+                <i class="bi bi-trash"></i>
+                ล้างทั้งหมด
+            </button>
+
+        </div>
+
+
+        <div class="card-body p-0">
+
+            <div class="table-responsive">
+
+                <table class="table table-hover mb-0">
+
+                    <thead>
+
+                        <tr>
+                            <th class="ps-3">วันที่</th>
+                            <th>รายการ</th>
+                            <th>ประเภท</th>
+                            <th class="text-end pe-3">
+                                จำนวนเงิน
+                            </th>
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="historyTable">
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- SUMMARY -->
+    <div class="row g-3">
+
+        <div class="col-md-4">
+
+            <div class="card p-4 text-center">
+
+                <div class="text-secondary">
+                    รายรับทั้งหมด
+                </div>
+
+                <h3
+                    class="success-text mt-2"
+                    id="totalIncome"
+                >
+                    ฿0
+                </h3>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-4">
+
+            <div class="card p-4 text-center">
+
+                <div class="text-secondary">
+                    รายจ่ายทั้งหมด
+                </div>
+
+                <h3
+                    class="danger-text mt-2"
+                    id="totalExpense"
+                >
+                    ฿0
+                </h3>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-4">
+
+            <div class="card p-4 text-center">
+
+                <div class="text-secondary">
+                    เงินคงเหลือจากรายการ
+                </div>
+
+                <h3
+                    class="blue-text mt-2"
+                    id="balance"
+                >
+                    ฿0
+                </h3>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <footer class="text-center">
+        MoneyPlan © 2026 — Personal Finance Planner
+    </footer>
+
+</div>
+
+
+<script>
+
+    // -----------------------------
+    // Utility
+    // -----------------------------
+
+    function money(value) {
+
+        return new Intl.NumberFormat("th-TH", {
+            style: "currency",
+            currency: "THB",
+            maximumFractionDigits: 2
+        }).format(value || 0);
+
+    }
+
+
+    // -----------------------------
+    // Calculate
+    // -----------------------------
+
+    function calculate() {
+
+        const weeklyIncome =
+            Number(document.getElementById("weeklyIncome").value) || 0;
+
+        const dailyExpense =
+            Number(document.getElementById("dailyExpense").value) || 0;
+
+        const goalAmount =
+            Number(document.getElementById("goalAmount").value) || 0;
+
+        const currentSaving =
+            Number(document.getElementById("currentSaving").value) || 0;
+
+        const targetDays =
+            Number(document.getElementById("targetDays").value) || 0;
+
+
+        // รายรับเฉลี่ยต่อวัน
+        const incomePerDay = weeklyIncome / 7;
+
+
+        // เงินเหลือหลังหักรายจ่าย
+        const remainingPerDay =
+            incomePerDay - dailyExpense;
+
+
+        // เงินที่ต้องเก็บเพื่อเป้าหมาย
+        const goalRemaining =
+            Math.max(goalAmount - currentSaving, 0);
+
+
+        // เงินออมต่อวัน
+        const savingPerDay =
+            targetDays > 0
+                ? goalRemaining / targetDays
+                : 0;
+
+
+        // งบที่ควรใช้ต่อวัน
+        const recommendedDaily =
+            Math.max(incomePerDay - savingPerDay, 0);
+
+
+        // เงินเหลือต่อสัปดาห์จากรายจ่ายปัจจุบัน
+        const weeklyRemaining =
+            weeklyIncome - (dailyExpense * 7);
+
+
+        // เงินออมประมาณต่อเดือน
+        const monthlySaving =
+            Math.max(weeklyRemaining, 0) * 4.345;
+
+
+        // Progress
+        let progress = 0;
+
+        if (goalAmount > 0) {
+
+            progress =
+                (currentSaving / goalAmount) * 100;
+
+            progress =
+                Math.min(Math.max(progress, 0), 100);
+
+        }
+
+
+        // -----------------------------
+        // Update UI
+        // -----------------------------
+
+        document.getElementById("weeklyIncomeResult").textContent =
+            money(weeklyIncome);
+
+        document.getElementById("dailyBudget").textContent =
+            money(Math.max(remainingPerDay, 0));
+
+        document.getElementById("dailySaving").textContent =
+            money(savingPerDay);
+
+        document.getElementById("remainingDays").textContent =
+            targetDays + " วัน";
+
+
+        document.getElementById("recommendedDaily").textContent =
+            money(recommendedDaily) + " / วัน";
+
+        document.getElementById("incomePerDay").textContent =
+            money(incomePerDay);
+
+        document.getElementById("expensePerDay").textContent =
+            money(dailyExpense);
+
+        document.getElementById("weeklyRemaining").textContent =
+            money(Math.max(weeklyRemaining, 0));
+
+        document.getElementById("monthlySaving").textContent =
+            money(monthlySaving);
+
+
+        document.getElementById("goalResult").textContent =
+            money(goalAmount);
+
+        document.getElementById("savingResult").textContent =
+            money(currentSaving);
+
+        document.getElementById("goalRemaining").textContent =
+            money(goalRemaining);
+
+        document.getElementById("savingPerDay").textContent =
+            money(savingPerDay) + " / วัน";
+
+        document.getElementById("progressText").textContent =
+            progress.toFixed(1) + "%";
+
+        document.getElementById("goalProgress").style.width =
+            progress + "%";
+
+
+        // Save settings
+        localStorage.setItem(
+            "moneyPlanSettings",
+            JSON.stringify({
+                weeklyIncome,
+                dailyExpense,
+                goalAmount,
+                currentSaving,
+                targetDays
+            })
+        );
+
+    }
+
+
+    // -----------------------------
+    // Transaction
+    // -----------------------------
+
+    function getTransactions() {
+
+        return JSON.parse(
+            localStorage.getItem("moneyPlanTransactions")
+        ) || [];
+
+    }
+
+
+    function saveTransactions(data) {
+
+        localStorage.setItem(
+            "moneyPlanTransactions",
+            JSON.stringify(data)
+        );
+
+    }
+
+
+    function addTransaction() {
+
+        const type =
+            document.getElementById("transactionType").value;
+
+        const name =
+            document.getElementById("transactionName").value.trim();
+
+        const amount =
+            Number(
+                document.getElementById("transactionAmount").value
+            );
+
+
+        if (!name) {
+
+            alert("กรุณาใส่ชื่อรายการ");
+            return;
+
+        }
+
+
+        if (!amount || amount <= 0) {
+
+            alert("กรุณาใส่จำนวนเงิน");
+            return;
+
+        }
+
+
+        const transactions = getTransactions();
+
+
+        transactions.unshift({
+
+            id: Date.now(),
+
+            date: new Date().toLocaleDateString("th-TH"),
+
+            type,
+
+            name,
+
+            amount
+
+        });
+
+
+        saveTransactions(transactions);
+
+
+        document.getElementById("transactionName").value = "";
+        document.getElementById("transactionAmount").value = "";
+
+
+        renderHistory();
+
+    }
+
+
+    // -----------------------------
+    // History
+    // -----------------------------
+
+    function renderHistory() {
+
+        const transactions = getTransactions();
+
+        const table =
+            document.getElementById("historyTable");
+
+
+        table.innerHTML = "";
+
+
+        if (transactions.length === 0) {
+
+            table.innerHTML = `
+                <tr>
+                    <td colspan="4">
+                        <div class="empty-history">
+                            <i class="bi bi-receipt fs-2 d-block mb-2"></i>
+                            ยังไม่มีรายการ
+                        </div>
+                    </td>
+                </tr>
+            `;
+
+            updateSummary();
+
+            return;
+
+        }
+
+
+        transactions.forEach(item => {
+
+            const isIncome =
+                item.type === "income";
+
+
+            const typeText =
+                isIncome
+                    ? "รายรับ"
+                    : "รายจ่าย";
+
+
+            const typeClass =
+                isIncome
+                    ? "success-text"
+                    : "danger-text";
+
+
+            const sign =
+                isIncome
+                    ? "+"
+                    : "-";
+
+
+            table.innerHTML += `
+
+                <tr>
+
+                    <td class="ps-3">
+                        ${item.date}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(item.name)}
+                    </td>
+
+                    <td>
+                        <span class="${typeClass}">
+                            ${typeText}
+                        </span>
+                    </td>
+
+                    <td class="text-end pe-3 ${typeClass}">
+                        ${sign}${money(item.amount)}
+                    </td>
+
+                </tr>
+
+            `;
+
+        });
+
+
+        updateSummary();
+
+    }
+
+
+    // -----------------------------
+    // Summary
+    // -----------------------------
+
+    function updateSummary() {
+
+        const transactions =
+            getTransactions();
+
+
+        let income = 0;
+        let expense = 0;
+
+
+        transactions.forEach(item => {
+
+            if (item.type === "income") {
+
+                income += Number(item.amount);
+
+            } else {
+
+                expense += Number(item.amount);
+
+            }
+
+        });
+
+
+        document.getElementById("totalIncome").textContent =
+            money(income);
+
+        document.getElementById("totalExpense").textContent =
+            money(expense);
+
+        document.getElementById("balance").textContent =
+            money(income - expense);
+
+    }
+
+
+    // -----------------------------
+    // Clear History
+    // -----------------------------
+
+    function clearHistory() {
+
+        if (
+            !confirm(
+                "ต้องการลบประวัติรายการทั้งหมดหรือไม่?"
+            )
+        ) {
+
+            return;
+
+        }
+
+
+        localStorage.removeItem(
+            "moneyPlanTransactions"
+        );
+
+
+        renderHistory();
+
+    }
+
+
+    // -----------------------------
+    // Escape HTML
+    // -----------------------------
+
+    function escapeHtml(text) {
+
+        const div = document.createElement("div");
+
+        div.textContent = text;
+
+        return div.innerHTML;
+
+    }
+
+
+    // -----------------------------
+    // Load Settings
+    // -----------------------------
+
+    function loadSettings() {
+
+        const settings =
+            JSON.parse(
+                localStorage.getItem(
+                    "moneyPlanSettings"
+                )
+            );
+
+
+        if (!settings) {
+
+            calculate();
+            return;
+
+        }
+
+
+        document.getElementById("weeklyIncome").value =
+            settings.weeklyIncome || "";
+
+        document.getElementById("dailyExpense").value =
+            settings.dailyExpense || "";
+
+        document.getElementById("goalAmount").value =
+            settings.goalAmount || "";
+
+        document.getElementById("currentSaving").value =
+            settings.currentSaving || "";
+
+        document.getElementById("targetDays").value =
+            settings.targetDays || "";
+
+
+        calculate();
+
+    }
+
+
+    // -----------------------------
+    // Init
+    // -----------------------------
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        function () {
+
+            loadSettings();
+
+            renderHistory();
+
+        }
+    );
+
+</script>
+
+
+</body>
+</html>

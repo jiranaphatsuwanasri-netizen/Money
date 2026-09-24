@@ -6,7 +6,7 @@
 
     <title>MoneyPlan - วางแผนการเงิน</title>
 
-    <!-- Bootstrap 5 -->
+    <!-- Bootstrap 5 (grid & utilities only) -->
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
         rel="stylesheet"
@@ -18,213 +18,301 @@
         href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
     >
 
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
     <style>
         :root {
-            --bg-main: #080b10;
-            --bg-card: #10151d;
-            --bg-card-2: #151c26;
-            --blue: #0d6efd;
-            --blue-light: #3d9bff;
-            --border: rgba(255,255,255,.08);
+            --bg-0: #060714;
+            --bg-1: #0b0e20;
+            --glass: rgba(255,255,255,.045);
+            --glass-brd: rgba(255,255,255,.09);
+            --violet: #7c5cff;
+            --violet-2: #b06ab3;
+            --blue: #4f8cff;
+            --cyan: #37e6d0;
+            --pink: #ff6fa5;
+            --amber: #ffb648;
+            --text-dim: #8991a8;
+            --radius: 20px;
         }
 
-        * {
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; }
 
         body {
-            background: var(--bg-main);
-            color: #fff;
-            font-family: "Segoe UI", Tahoma, sans-serif;
+            background:
+                radial-gradient(1100px 550px at 12% -10%, rgba(124,92,255,.28), transparent 60%),
+                radial-gradient(900px 500px at 100% 0%, rgba(55,230,208,.14), transparent 55%),
+                radial-gradient(700px 500px at 50% 100%, rgba(255,111,165,.10), transparent 55%),
+                var(--bg-0);
+            background-attachment: fixed;
+            color: #f2f3f8;
+            font-family: "Inter", "Kanit", "Segoe UI", Tahoma, sans-serif;
+            min-height: 100vh;
         }
 
+        h1, h2, h3, h4, .navbar-brand { font-family: "Kanit", "Inter", sans-serif; }
+
+        /* NAVBAR */
         .navbar {
-            background: #0a0f16;
-            border-bottom: 1px solid var(--border);
+            background: rgba(8,10,22,.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--glass-brd);
         }
 
-        .navbar-brand {
-            font-weight: 700;
-            letter-spacing: .5px;
-        }
+        .navbar-brand { font-weight: 700; letter-spacing: .3px; font-size: 1.2rem; }
 
         .brand-icon {
-            width: 38px;
-            height: 38px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--blue);
-            border-radius: 10px;
-            margin-right: 8px;
+            width: 40px; height: 40px;
+            display: inline-flex; align-items: center; justify-content: center;
+            background: linear-gradient(135deg, var(--violet), var(--blue));
+            border-radius: 12px;
+            margin-right: 10px;
+            box-shadow: 0 6px 18px rgba(124,92,255,.4);
         }
 
-        .hero {
-            padding: 40px 0 25px;
+        /* HERO */
+        .hero { padding: 46px 0 28px; }
+
+        .hero .eyebrow {
+            display: inline-flex; align-items: center; gap: 6px;
+            font-size: 12.5px; font-weight: 600; letter-spacing: .4px;
+            color: var(--cyan);
+            background: rgba(55,230,208,.1);
+            border: 1px solid rgba(55,230,208,.25);
+            padding: 5px 14px; border-radius: 999px;
+            margin-bottom: 16px;
         }
 
-        .hero h1 {
-            font-weight: 700;
+        .hero h1 { font-weight: 700; font-size: 2.5rem; line-height: 1.2; }
+
+        .hero .gradient-text {
+            background: linear-gradient(90deg, var(--violet), var(--blue), var(--cyan));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
 
-        .hero span {
-            color: var(--blue-light);
-        }
+        .hero p { color: var(--text-dim); font-size: 1.02rem; margin-top: 10px; }
 
+        /* GLASS CARD */
         .card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
+            background: var(--glass);
+            border: 1px solid var(--glass-brd);
+            border-radius: var(--radius);
             color: #fff;
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            box-shadow: 0 10px 30px rgba(0,0,0,.25);
         }
 
         .card-header {
             background: transparent;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid var(--glass-brd);
             font-weight: 600;
+            font-size: 1.02rem;
+            padding: 18px 22px;
         }
 
-        .stat-card {
-            min-height: 150px;
-            position: relative;
-            overflow: hidden;
+        .card-body { padding: 22px; }
+
+        /* Section title inside form */
+        .field-group-title {
+            font-size: 12.5px;
+            font-weight: 600;
+            letter-spacing: .6px;
+            text-transform: uppercase;
+            color: var(--text-dim);
+            margin-bottom: 14px;
         }
 
-        .stat-icon {
-            width: 48px;
-            height: 48px;
+        /* Amount + period control */
+        .amount-period {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(13,110,253,.15);
-            color: var(--blue-light);
+            border: 1px solid #262b42;
+            background: #0c0e1c;
+            border-radius: 14px;
+            overflow: hidden;
+            transition: border-color .15s ease, box-shadow .15s ease;
+        }
+
+        .amount-period:focus-within {
+            border-color: var(--violet);
+            box-shadow: 0 0 0 .2rem rgba(124,92,255,.18);
+        }
+
+        .amount-period input[type="number"] {
+            flex: 1 1 auto;
+            min-width: 0;
+            background: transparent;
+            border: none;
+            color: #fff;
+            padding: 12px 14px;
+            font-size: 1rem;
+            font-weight: 600;
+            outline: none;
+        }
+
+        .amount-period input[type="number"]::placeholder { color: #5c6480; font-weight: 400; }
+
+        .amount-period select {
+            flex: 0 0 auto;
+            background: #141830;
+            border: none;
+            border-left: 1px solid #262b42;
+            color: #cfd4e6;
+            padding: 12px 10px;
+            font-size: .85rem;
+            font-weight: 500;
+            outline: none;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6'><path d='M0 0l5 6 5-6z' fill='%238991a8'/></svg>");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            padding-right: 28px;
+            cursor: pointer;
+        }
+
+        .form-control, .form-select {
+            background: #0c0e1c;
+            border: 1px solid #262b42;
+            color: #fff;
             border-radius: 12px;
-            font-size: 22px;
+            padding: 11px 14px;
         }
 
-        .stat-value {
-            font-size: 28px;
-            font-weight: 700;
-            margin-top: 12px;
-        }
-
-        .stat-label {
-            color: #8f9baa;
-            font-size: 14px;
-        }
-
-        .form-control,
-        .form-select {
-            background: #0c1118;
-            border: 1px solid #263140;
+        .form-control:focus, .form-select:focus {
+            background: #0c0e1c;
             color: #fff;
-            border-radius: 10px;
+            border-color: var(--violet);
+            box-shadow: 0 0 0 .2rem rgba(124,92,255,.18);
         }
 
-        .form-control:focus,
-        .form-select:focus {
-            background: #0c1118;
-            color: #fff;
-            border-color: var(--blue);
-            box-shadow: 0 0 0 .2rem rgba(13,110,253,.15);
-        }
-
-        .form-control::placeholder {
-            color: #687383;
-        }
+        .form-control::placeholder { color: #5c6480; }
 
         .form-label {
             color: #cbd3dc;
-            font-size: 14px;
+            font-size: 13.5px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
         }
 
-        .btn {
-            border-radius: 10px;
+        .form-label i { color: var(--violet-2); }
+
+        .btn { border-radius: 12px; font-weight: 600; }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--violet), var(--blue));
+            border: none;
+            box-shadow: 0 8px 22px rgba(124,92,255,.35);
+            transition: transform .15s ease, box-shadow .15s ease;
         }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 26px rgba(124,92,255,.45);
+        }
+
+        .btn-outline-danger {
+            border-color: rgba(255,111,165,.4);
+            color: var(--pink);
+        }
+
+        .btn-outline-danger:hover {
+            background: rgba(255,111,165,.15);
+            border-color: var(--pink);
+            color: var(--pink);
+        }
+
+        /* STAT CARDS */
+        .stat-card { min-height: 148px; position: relative; overflow: hidden; }
+
+        .stat-icon {
+            width: 46px; height: 46px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 13px;
+            font-size: 20px;
+        }
+
+        .stat-icon.violet { background: rgba(124,92,255,.15); color: #b3a1ff; }
+        .stat-icon.blue { background: rgba(79,140,255,.15); color: #8fb4ff; }
+        .stat-icon.cyan { background: rgba(55,230,208,.15); color: #6ff0dd; }
+        .stat-icon.amber { background: rgba(255,182,72,.15); color: #ffcb7a; }
+
+        .stat-value { font-size: 25px; font-weight: 700; margin-top: 12px; letter-spacing: -.2px; }
+        .stat-label { color: var(--text-dim); font-size: 13.5px; margin-top: 2px; }
 
         .progress {
-            background: #242c36;
+            background: #1a1e33;
             height: 12px;
             border-radius: 20px;
+            overflow: hidden;
         }
 
         .progress-bar {
             border-radius: 20px;
+            background: linear-gradient(90deg, var(--violet), var(--cyan));
         }
 
         .goal-box {
-            background: var(--bg-card-2);
+            background: rgba(255,255,255,.035);
+            border: 1px solid var(--glass-brd);
             border-radius: 14px;
-            padding: 20px;
+            padding: 18px;
         }
 
         .recommend-box {
-            background: linear-gradient(
-                135deg,
-                rgba(13,110,253,.18),
-                rgba(13,110,253,.03)
-            );
-            border: 1px solid rgba(13,110,253,.3);
-            border-radius: 14px;
+            background: linear-gradient(135deg, rgba(124,92,255,.2), rgba(55,230,208,.05));
+            border: 1px solid rgba(124,92,255,.3);
+            border-radius: 16px;
             padding: 20px;
         }
 
         .recommend-number {
-            color: var(--blue-light);
-            font-size: 34px;
+            background: linear-gradient(90deg, #c9bcff, var(--cyan));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-size: 32px;
             font-weight: 700;
         }
 
-        .table {
-            --bs-table-bg: transparent;
-            --bs-table-color: #fff;
-            --bs-table-border-color: var(--border);
+        .warning-banner {
+            display: none;
+            align-items: flex-start;
+            gap: 10px;
+            background: rgba(255,182,72,.12);
+            border: 1px solid rgba(255,182,72,.35);
+            color: #ffd08a;
+            border-radius: 14px;
+            padding: 12px 16px;
+            font-size: 13.5px;
+            margin-bottom: 16px;
         }
 
-        .table th {
-            color: #8995a3;
-            font-size: 13px;
-        }
+        .table { --bs-table-bg: transparent; --bs-table-color: #fff; --bs-table-border-color: var(--glass-brd); }
+        .table th { color: #8995a3; font-size: 12.5px; text-transform: uppercase; letter-spacing: .4px; font-weight: 600; }
+        .table td { vertical-align: middle; }
 
-        .empty-history {
-            color: #6f7b89;
-            text-align: center;
-            padding: 30px 10px;
-        }
+        .empty-history { color: #6f7b89; text-align: center; padding: 34px 10px; }
 
-        footer {
-            color: #687383;
-            padding: 35px 0;
-        }
+        footer { color: #5c6480; padding: 36px 0; font-size: 13.5px; }
 
-        .blue-text {
-            color: var(--blue-light);
-        }
-
-        .danger-text {
-            color: #ff6675;
-        }
-
-        .success-text {
-            color: #35d07f;
-        }
-
-        .warning-text {
-            color: #ffc107;
-        }
+        .blue-text { color: #8fb4ff; }
+        .danger-text { color: #ff7a92; }
+        .success-text { color: #3fe2a0; }
+        .warning-text { color: #ffcb7a; }
 
         @media (max-width: 576px) {
-            .hero {
-                padding-top: 25px;
-            }
-
-            .hero h1 {
-                font-size: 28px;
-            }
-
-            .stat-value {
-                font-size: 23px;
-            }
+            .hero { padding-top: 28px; }
+            .hero h1 { font-size: 1.7rem; }
+            .stat-value { font-size: 21px; }
+            .card-body { padding: 18px; }
         }
     </style>
 </head>
@@ -235,15 +323,10 @@
 <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
     <div class="container">
         <a class="navbar-brand" href="#">
-            <span class="brand-icon">
-                <i class="bi bi-wallet2"></i>
-            </span>
+            <span class="brand-icon"><i class="bi bi-wallet2"></i></span>
             MoneyPlan
         </a>
-
-        <span class="navbar-text text-secondary small">
-            Personal Finance Planner
-        </span>
+        <span class="navbar-text text-secondary small">Personal Finance Planner</span>
     </div>
 </nav>
 
@@ -253,15 +336,10 @@
     <!-- HERO -->
     <section class="hero">
         <div class="row align-items-center">
-            <div class="col-lg-8">
-                <h1>
-                    วางแผนเงินของคุณ
-                    <span>ให้ง่ายขึ้น</span>
-                </h1>
-
-                <p class="text-secondary mb-0">
-                    คำนวณงบใช้จ่ายและเงินออม เพื่อให้ไปถึงเป้าหมายได้ตามแผน
-                </p>
+            <div class="col-lg-9">
+                <span class="eyebrow"><i class="bi bi-stars"></i> วางแผนก่อนช้อป ชัวร์กว่าเดา</span>
+                <h1>วางแผนเงินของคุณ <span class="gradient-text">ให้ง่ายขึ้น</span></h1>
+                <p>คำนวณงบใช้จ่ายและเงินออม เพื่อให้ไปถึงเป้าหมายได้ตามแผน — เลือกหน่วยเวลาได้อิสระ ทั้งรายวัน รายเดือน หรือรายปี</p>
             </div>
         </div>
     </section>
@@ -269,137 +347,90 @@
 
     <!-- INPUT -->
     <div class="card mb-4">
-        <div class="card-header py-3">
+        <div class="card-header">
             <i class="bi bi-calculator me-2 blue-text"></i>
             ข้อมูลทางการเงิน
         </div>
 
         <div class="card-body">
 
-            <div class="row g-3">
+            <div class="field-group-title">รายรับ-รายจ่าย</div>
 
-                <!-- Weekly income -->
-                <div class="col-md-6 col-lg-3">
-                    <label class="form-label">
-                        <i class="bi bi-cash-stack me-1"></i>
-                        รายรับต่อสัปดาห์
-                    </label>
+            <div class="row g-3 mb-1">
 
-                    <div class="input-group">
-                        <input
-                            type="number"
-                            class="form-control"
-                            id="weeklyIncome"
-                            placeholder="เช่น 3000"
-                            min="0"
-                        >
-                        <span class="input-group-text bg-dark text-secondary">
-                            บาท
-                        </span>
+                <!-- Income -->
+                <div class="col-md-6">
+                    <label class="form-label"><i class="bi bi-cash-stack me-1"></i>&nbsp;รายรับ</label>
+                    <div class="amount-period">
+                        <input type="number" id="incomeAmount" placeholder="เช่น 3000" min="0">
+                        <select id="incomePeriod">
+                            <option value="day">ต่อวัน</option>
+                            <option value="month" selected>ต่อเดือน</option>
+                            <option value="year">ต่อปี</option>
+                        </select>
                     </div>
                 </div>
 
-
-                <!-- Daily expense -->
-                <div class="col-md-6 col-lg-3">
-                    <label class="form-label">
-                        <i class="bi bi-cart3 me-1"></i>
-                        รายจ่ายต่อวัน
-                    </label>
-
-                    <div class="input-group">
-                        <input
-                            type="number"
-                            class="form-control"
-                            id="dailyExpense"
-                            placeholder="เช่น 200"
-                            min="0"
-                        >
-                        <span class="input-group-text bg-dark text-secondary">
-                            บาท
-                        </span>
-                    </div>
-                </div>
-
-
-                <!-- Goal price -->
-                <div class="col-md-6 col-lg-3">
-                    <label class="form-label">
-                        <i class="bi bi-bullseye me-1"></i>
-                        ราคาของที่อยากซื้อ
-                    </label>
-
-                    <div class="input-group">
-                        <input
-                            type="number"
-                            class="form-control"
-                            id="goalAmount"
-                            placeholder="เช่น 10000"
-                            min="0"
-                        >
-                        <span class="input-group-text bg-dark text-secondary">
-                            บาท
-                        </span>
-                    </div>
-                </div>
-
-
-                <!-- Current saving -->
-                <div class="col-md-6 col-lg-3">
-                    <label class="form-label">
-                        <i class="bi bi-piggy-bank me-1"></i>
-                        เงินที่มีอยู่แล้ว
-                    </label>
-
-                    <div class="input-group">
-                        <input
-                            type="number"
-                            class="form-control"
-                            id="currentSaving"
-                            placeholder="เช่น 2000"
-                            min="0"
-                        >
-                        <span class="input-group-text bg-dark text-secondary">
-                            บาท
-                        </span>
+                <!-- Expense -->
+                <div class="col-md-6">
+                    <label class="form-label"><i class="bi bi-cart3 me-1"></i>&nbsp;รายจ่าย</label>
+                    <div class="amount-period">
+                        <input type="number" id="expenseAmount" placeholder="เช่น 200" min="0">
+                        <select id="expensePeriod">
+                            <option value="day" selected>ต่อวัน</option>
+                            <option value="month">ต่อเดือน</option>
+                            <option value="year">ต่อปี</option>
+                        </select>
                     </div>
                 </div>
 
             </div>
 
 
-            <hr class="border-secondary my-4">
+            <hr class="border-secondary my-4" style="opacity:.15">
 
+            <div class="field-group-title">เป้าหมายที่อยากซื้อ</div>
 
             <div class="row g-3">
 
-                <!-- Target days -->
-                <div class="col-md-6">
-                    <label class="form-label">
-                        <i class="bi bi-calendar-event me-1"></i>
-                        ต้องการซื้อภายในกี่วัน
-                    </label>
-
-                    <input
-                        type="number"
-                        class="form-control"
-                        id="targetDays"
-                        placeholder="เช่น 30"
-                        min="1"
-                    >
+                <!-- Goal price -->
+                <div class="col-md-6 col-lg-4">
+                    <label class="form-label"><i class="bi bi-bullseye me-1"></i>&nbsp;ราคาของที่อยากซื้อ</label>
+                    <div class="input-group">
+                        <input type="number" class="form-control" id="goalAmount" placeholder="เช่น 10000" min="0">
+                        <span class="input-group-text bg-dark text-secondary" style="border-radius:0 12px 12px 0;">บาท</span>
+                    </div>
                 </div>
 
-
-                <div class="col-md-6 d-flex align-items-end">
-                    <button
-                        class="btn btn-primary w-100 py-2"
-                        onclick="calculate()"
-                    >
-                        <i class="bi bi-lightning-charge-fill me-1"></i>
-                        คำนวณแผนการเงิน
-                    </button>
+                <!-- Current saving -->
+                <div class="col-md-6 col-lg-4">
+                    <label class="form-label"><i class="bi bi-piggy-bank me-1"></i>&nbsp;เงินที่มีอยู่แล้ว</label>
+                    <div class="input-group">
+                        <input type="number" class="form-control" id="currentSaving" placeholder="เช่น 2000" min="0">
+                        <span class="input-group-text bg-dark text-secondary" style="border-radius:0 12px 12px 0;">บาท</span>
+                    </div>
                 </div>
 
+                <!-- Target time -->
+                <div class="col-md-6 col-lg-4">
+                    <label class="form-label"><i class="bi bi-calendar-event me-1"></i>&nbsp;ต้องการซื้อภายใน</label>
+                    <div class="amount-period">
+                        <input type="number" id="targetAmount" placeholder="เช่น 30" min="1">
+                        <select id="targetPeriod">
+                            <option value="day" selected>วัน</option>
+                            <option value="month">เดือน</option>
+                            <option value="year">ปี</option>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="mt-4">
+                <button class="btn btn-primary w-100 py-2" onclick="calculate()">
+                    <i class="bi bi-lightning-charge-fill me-1"></i>
+                    คำนวณแผนการเงิน
+                </button>
             </div>
 
         </div>
@@ -411,68 +442,33 @@
 
         <div class="col-6 col-lg-3">
             <div class="card stat-card p-3">
-                <div class="stat-icon">
-                    <i class="bi bi-wallet2"></i>
-                </div>
-
-                <div class="stat-value" id="weeklyIncomeResult">
-                    ฿0
-                </div>
-
-                <div class="stat-label">
-                    รายรับต่อสัปดาห์
-                </div>
+                <div class="stat-icon violet"><i class="bi bi-wallet2"></i></div>
+                <div class="stat-value" id="weeklyIncomeResult">฿0</div>
+                <div class="stat-label">รายรับเฉลี่ยต่อสัปดาห์</div>
             </div>
         </div>
 
-
         <div class="col-6 col-lg-3">
             <div class="card stat-card p-3">
-                <div class="stat-icon">
-                    <i class="bi bi-calendar-day"></i>
-                </div>
-
-                <div class="stat-value blue-text" id="dailyBudget">
-                    ฿0
-                </div>
-
-                <div class="stat-label">
-                    งบใช้ต่อวัน
-                </div>
+                <div class="stat-icon blue"><i class="bi bi-calendar-day"></i></div>
+                <div class="stat-value blue-text" id="dailyBudget">฿0</div>
+                <div class="stat-label">งบใช้ต่อวัน</div>
             </div>
         </div>
 
-
         <div class="col-6 col-lg-3">
             <div class="card stat-card p-3">
-                <div class="stat-icon">
-                    <i class="bi bi-piggy-bank"></i>
-                </div>
-
-                <div class="stat-value success-text" id="dailySaving">
-                    ฿0
-                </div>
-
-                <div class="stat-label">
-                    ควรเก็บต่อวัน
-                </div>
+                <div class="stat-icon cyan"><i class="bi bi-piggy-bank"></i></div>
+                <div class="stat-value success-text" id="dailySaving">฿0</div>
+                <div class="stat-label">ควรเก็บต่อวัน</div>
             </div>
         </div>
 
-
         <div class="col-6 col-lg-3">
             <div class="card stat-card p-3">
-                <div class="stat-icon">
-                    <i class="bi bi-hourglass-split"></i>
-                </div>
-
-                <div class="stat-value warning-text" id="remainingDays">
-                    0 วัน
-                </div>
-
-                <div class="stat-label">
-                    ระยะเวลาเป้าหมาย
-                </div>
+                <div class="stat-icon amber"><i class="bi bi-hourglass-split"></i></div>
+                <div class="stat-value warning-text" id="remainingDays">0 วัน</div>
+                <div class="stat-label">ระยะเวลาเป้าหมาย</div>
             </div>
         </div>
 
@@ -484,184 +480,92 @@
 
         <!-- Daily plan -->
         <div class="col-lg-7">
-
             <div class="card h-100">
-
-                <div class="card-header py-3">
-                    <i class="bi bi-bar-chart-line me-2 blue-text"></i>
-                    แผนการใช้เงิน
-                </div>
-
+                <div class="card-header"><i class="bi bi-bar-chart-line me-2 blue-text"></i>แผนการใช้เงิน</div>
                 <div class="card-body">
 
-                    <div class="recommend-box mb-3">
-
-                        <div class="small text-secondary">
-                            คุณควรใช้เงินได้ไม่เกิน
-                        </div>
-
-                        <div class="recommend-number" id="recommendedDaily">
-                            ฿0 / วัน
-                        </div>
-
-                        <div class="small text-secondary">
-                            หลังจากกันเงินสำหรับเป้าหมายแล้ว
-                        </div>
-
+                    <div class="warning-banner" id="warningBanner">
+                        <i class="bi bi-exclamation-triangle-fill mt-1"></i>
+                        <span id="warningText"></span>
                     </div>
 
+                    <div class="recommend-box mb-3">
+                        <div class="small text-secondary">คุณควรใช้เงินได้ไม่เกิน</div>
+                        <div class="recommend-number" id="recommendedDaily">฿0 / วัน</div>
+                        <div class="small text-secondary">หลังจากกันเงินสำหรับเป้าหมายแล้ว</div>
+                    </div>
 
                     <div class="row g-3">
-
                         <div class="col-6">
                             <div class="goal-box">
-                                <small class="text-secondary">
-                                    รายรับเฉลี่ยต่อวัน
-                                </small>
-
-                                <h4 class="mt-2" id="incomePerDay">
-                                    ฿0
-                                </h4>
+                                <small class="text-secondary">รายรับเฉลี่ยต่อวัน</small>
+                                <h4 class="mt-2" id="incomePerDay">฿0</h4>
                             </div>
                         </div>
-
-
                         <div class="col-6">
                             <div class="goal-box">
-                                <small class="text-secondary">
-                                    รายจ่ายที่ตั้งไว้
-                                </small>
-
-                                <h4 class="mt-2" id="expensePerDay">
-                                    ฿0
-                                </h4>
+                                <small class="text-secondary">รายจ่ายเฉลี่ยต่อวัน</small>
+                                <h4 class="mt-2" id="expensePerDay">฿0</h4>
                             </div>
                         </div>
-
-
                         <div class="col-6">
                             <div class="goal-box">
-                                <small class="text-secondary">
-                                    เงินเหลือต่อสัปดาห์
-                                </small>
-
-                                <h4 class="mt-2" id="weeklyRemaining">
-                                    ฿0
-                                </h4>
+                                <small class="text-secondary">เงินเหลือต่อสัปดาห์</small>
+                                <h4 class="mt-2" id="weeklyRemaining">฿0</h4>
                             </div>
                         </div>
-
-
                         <div class="col-6">
                             <div class="goal-box">
-                                <small class="text-secondary">
-                                    เงินเหลือต่อเดือนโดยประมาณ
-                                </small>
-
-                                <h4 class="mt-2" id="monthlySaving">
-                                    ฿0
-                                </h4>
+                                <small class="text-secondary">เงินเหลือต่อเดือนโดยประมาณ</small>
+                                <h4 class="mt-2" id="monthlySaving">฿0</h4>
                             </div>
                         </div>
-
                     </div>
 
                 </div>
-
             </div>
-
         </div>
 
 
         <!-- Goal -->
         <div class="col-lg-5">
-
             <div class="card h-100">
-
-                <div class="card-header py-3">
-                    <i class="bi bi-bullseye me-2 blue-text"></i>
-                    เป้าหมายการออม
-                </div>
-
+                <div class="card-header"><i class="bi bi-bullseye me-2 blue-text"></i>เป้าหมายการออม</div>
                 <div class="card-body">
 
                     <div class="d-flex justify-content-between mb-2">
-                        <span class="text-secondary">
-                            เป้าหมาย
-                        </span>
-
-                        <strong id="goalResult">
-                            ฿0
-                        </strong>
+                        <span class="text-secondary">เป้าหมาย</span>
+                        <strong id="goalResult">฿0</strong>
                     </div>
-
 
                     <div class="d-flex justify-content-between mb-2">
-                        <span class="text-secondary">
-                            เงินที่มีแล้ว
-                        </span>
-
-                        <strong id="savingResult">
-                            ฿0
-                        </strong>
+                        <span class="text-secondary">เงินที่มีแล้ว</span>
+                        <strong id="savingResult">฿0</strong>
                     </div>
-
 
                     <div class="d-flex justify-content-between mb-3">
-                        <span class="text-secondary">
-                            เหลืออีก
-                        </span>
-
-                        <strong
-                            class="blue-text"
-                            id="goalRemaining"
-                        >
-                            ฿0
-                        </strong>
+                        <span class="text-secondary">เหลืออีก</span>
+                        <strong class="blue-text" id="goalRemaining">฿0</strong>
                     </div>
-
 
                     <div class="progress mb-3">
-                        <div
-                            class="progress-bar"
-                            id="goalProgress"
-                            style="width:0%"
-                        ></div>
+                        <div class="progress-bar" id="goalProgress" style="width:0%"></div>
                     </div>
 
-
                     <div class="text-center">
-
-                        <div class="small text-secondary">
-                            ความคืบหน้า
-                        </div>
-
-                        <h3 id="progressText">
-                            0%
-                        </h3>
-
+                        <div class="small text-secondary">ความคืบหน้า</div>
+                        <h3 id="progressText">0%</h3>
                     </div>
 
-
-                    <hr class="border-secondary">
-
+                    <hr class="border-secondary" style="opacity:.15">
 
                     <div class="text-center">
-
-                        <div class="small text-secondary">
-                            ควรเก็บเงินอย่างน้อย
-                        </div>
-
-                        <h2 class="success-text" id="savingPerDay">
-                            ฿0 / วัน
-                        </h2>
-
+                        <div class="small text-secondary">ควรเก็บเงินอย่างน้อย</div>
+                        <h2 class="success-text" id="savingPerDay">฿0 / วัน</h2>
                     </div>
 
                 </div>
-
             </div>
-
         </div>
 
     </div>
@@ -669,212 +573,90 @@
 
     <!-- ADD TRANSACTION -->
     <div class="card mb-4">
-
-        <div class="card-header py-3">
-            <i class="bi bi-plus-circle me-2 blue-text"></i>
-            เพิ่มรายการ
-        </div>
-
+        <div class="card-header"><i class="bi bi-plus-circle me-2 blue-text"></i>เพิ่มรายการ</div>
         <div class="card-body">
-
             <div class="row g-3">
 
                 <div class="col-md-3">
-
-                    <label class="form-label">
-                        ประเภท
-                    </label>
-
-                    <select
-                        class="form-select"
-                        id="transactionType"
-                    >
-                        <option value="expense">
-                            รายจ่าย
-                        </option>
-
-                        <option value="income">
-                            รายรับ
-                        </option>
-
+                    <label class="form-label">ประเภท</label>
+                    <select class="form-select" id="transactionType">
+                        <option value="expense">รายจ่าย</option>
+                        <option value="income">รายรับ</option>
                     </select>
-
                 </div>
-
 
                 <div class="col-md-3">
-
-                    <label class="form-label">
-                        รายการ
-                    </label>
-
-                    <input
-                        type="text"
-                        class="form-control"
-                        id="transactionName"
-                        placeholder="เช่น ค่าอาหาร"
-                    >
-
+                    <label class="form-label">รายการ</label>
+                    <input type="text" class="form-control" id="transactionName" placeholder="เช่น ค่าอาหาร">
                 </div>
-
 
                 <div class="col-md-3">
-
-                    <label class="form-label">
-                        จำนวนเงิน
-                    </label>
-
-                    <input
-                        type="number"
-                        class="form-control"
-                        id="transactionAmount"
-                        placeholder="0"
-                        min="0"
-                    >
-
+                    <label class="form-label">จำนวนเงิน</label>
+                    <input type="number" class="form-control" id="transactionAmount" placeholder="0" min="0">
                 </div>
-
 
                 <div class="col-md-3 d-flex align-items-end">
-
-                    <button
-                        class="btn btn-primary w-100"
-                        onclick="addTransaction()"
-                    >
+                    <button class="btn btn-primary w-100" onclick="addTransaction()">
                         <i class="bi bi-plus-lg"></i>
                         เพิ่มรายการ
                     </button>
-
                 </div>
 
             </div>
-
         </div>
-
     </div>
 
 
     <!-- HISTORY -->
     <div class="card mb-4">
-
-        <div class="card-header py-3 d-flex justify-content-between align-items-center">
-
-            <span>
-                <i class="bi bi-clock-history me-2 blue-text"></i>
-                ประวัติรายการ
-            </span>
-
-            <button
-                class="btn btn-sm btn-outline-danger"
-                onclick="clearHistory()"
-            >
-                <i class="bi bi-trash"></i>
-                ล้างทั้งหมด
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <span><i class="bi bi-clock-history me-2 blue-text"></i>ประวัติรายการ</span>
+            <button class="btn btn-sm btn-outline-danger" onclick="clearHistory()">
+                <i class="bi bi-trash"></i> ล้างทั้งหมด
             </button>
-
         </div>
 
-
         <div class="card-body p-0">
-
             <div class="table-responsive">
-
                 <table class="table table-hover mb-0">
-
                     <thead>
-
                         <tr>
                             <th class="ps-3">วันที่</th>
                             <th>รายการ</th>
                             <th>ประเภท</th>
-                            <th class="text-end pe-3">
-                                จำนวนเงิน
-                            </th>
+                            <th class="text-end pe-3">จำนวนเงิน</th>
                         </tr>
-
                     </thead>
-
-                    <tbody id="historyTable">
-
-                    </tbody>
-
+                    <tbody id="historyTable"></tbody>
                 </table>
-
             </div>
-
         </div>
-
     </div>
 
 
     <!-- SUMMARY -->
     <div class="row g-3">
-
         <div class="col-md-4">
-
             <div class="card p-4 text-center">
-
-                <div class="text-secondary">
-                    รายรับทั้งหมด
-                </div>
-
-                <h3
-                    class="success-text mt-2"
-                    id="totalIncome"
-                >
-                    ฿0
-                </h3>
-
+                <div class="text-secondary">รายรับทั้งหมด</div>
+                <h3 class="success-text mt-2" id="totalIncome">฿0</h3>
             </div>
-
         </div>
-
-
         <div class="col-md-4">
-
             <div class="card p-4 text-center">
-
-                <div class="text-secondary">
-                    รายจ่ายทั้งหมด
-                </div>
-
-                <h3
-                    class="danger-text mt-2"
-                    id="totalExpense"
-                >
-                    ฿0
-                </h3>
-
+                <div class="text-secondary">รายจ่ายทั้งหมด</div>
+                <h3 class="danger-text mt-2" id="totalExpense">฿0</h3>
             </div>
-
         </div>
-
-
         <div class="col-md-4">
-
             <div class="card p-4 text-center">
-
-                <div class="text-secondary">
-                    เงินคงเหลือจากรายการ
-                </div>
-
-                <h3
-                    class="blue-text mt-2"
-                    id="balance"
-                >
-                    ฿0
-                </h3>
-
+                <div class="text-secondary">เงินคงเหลือจากรายการ</div>
+                <h3 class="blue-text mt-2" id="balance">฿0</h3>
             </div>
-
         </div>
-
     </div>
 
-
-    <footer class="text-center">
-        MoneyPlan © 2026 — Personal Finance Planner
-    </footer>
+    <footer class="text-center">MoneyPlan © 2026 — Personal Finance Planner</footer>
 
 </div>
 
@@ -885,14 +667,24 @@
     // Utility
     // -----------------------------
 
-    function money(value) {
+    const PERIOD_DAYS = { day: 1, month: 30, year: 365 };
 
+    function money(value) {
         return new Intl.NumberFormat("th-TH", {
             style: "currency",
             currency: "THB",
             maximumFractionDigits: 2
         }).format(value || 0);
+    }
 
+    function toPerDay(amount, period) {
+        const divisor = PERIOD_DAYS[period] || 1;
+        return amount / divisor;
+    }
+
+    function toDays(amount, period) {
+        const multiplier = PERIOD_DAYS[period] || 1;
+        return amount * multiplier;
     }
 
 
@@ -902,69 +694,57 @@
 
     function calculate() {
 
-        const weeklyIncome =
-            Number(document.getElementById("weeklyIncome").value) || 0;
+        const incomeAmount = Number(document.getElementById("incomeAmount").value) || 0;
+        const incomePeriod = document.getElementById("incomePeriod").value;
 
-        const dailyExpense =
-            Number(document.getElementById("dailyExpense").value) || 0;
+        const expenseAmount = Number(document.getElementById("expenseAmount").value) || 0;
+        const expensePeriod = document.getElementById("expensePeriod").value;
 
-        const goalAmount =
-            Number(document.getElementById("goalAmount").value) || 0;
+        const goalAmount = Number(document.getElementById("goalAmount").value) || 0;
+        const currentSaving = Number(document.getElementById("currentSaving").value) || 0;
 
-        const currentSaving =
-            Number(document.getElementById("currentSaving").value) || 0;
-
-        const targetDays =
-            Number(document.getElementById("targetDays").value) || 0;
+        const targetAmount = Number(document.getElementById("targetAmount").value) || 0;
+        const targetPeriod = document.getElementById("targetPeriod").value;
 
 
-        // รายรับเฉลี่ยต่อวัน
-        const incomePerDay = weeklyIncome / 7;
+        // รายรับ/รายจ่ายเฉลี่ยต่อวัน
+        const incomePerDay = toPerDay(incomeAmount, incomePeriod);
+        const expensePerDay = toPerDay(expenseAmount, expensePeriod);
 
-
-        // เงินเหลือหลังหักรายจ่าย
-        const remainingPerDay =
-            incomePerDay - dailyExpense;
-
+        // จำนวนวันที่ต้องการซื้อ
+        const targetDays = toDays(targetAmount, targetPeriod);
 
         // เงินที่ต้องเก็บเพื่อเป้าหมาย
-        const goalRemaining =
-            Math.max(goalAmount - currentSaving, 0);
-
+        const goalRemaining = Math.max(goalAmount - currentSaving, 0);
 
         // เงินออมต่อวัน
-        const savingPerDay =
-            targetDays > 0
-                ? goalRemaining / targetDays
-                : 0;
-
+        const savingPerDay = targetDays > 0 ? goalRemaining / targetDays : 0;
 
         // งบที่ควรใช้ต่อวัน
-        const recommendedDaily =
-            Math.max(incomePerDay - savingPerDay, 0);
+        const recommendedDaily = Math.max(incomePerDay - savingPerDay, 0);
 
-
-        // เงินเหลือต่อสัปดาห์จากรายจ่ายปัจจุบัน
-        const weeklyRemaining =
-            weeklyIncome - (dailyExpense * 7);
-
-
-        // เงินออมประมาณต่อเดือน
-        const monthlySaving =
-            Math.max(weeklyRemaining, 0) * 4.345;
-
+        // เงินเหลือต่อสัปดาห์ / เดือน
+        const weeklyRemaining = (incomePerDay - expensePerDay) * 7;
+        const monthlySaving = Math.max(weeklyRemaining, 0) * 4.345;
 
         // Progress
         let progress = 0;
-
         if (goalAmount > 0) {
+            progress = (currentSaving / goalAmount) * 100;
+            progress = Math.min(Math.max(progress, 0), 100);
+        }
 
-            progress =
-                (currentSaving / goalAmount) * 100;
+        // Warning: saving needed exceeds income
+        const warningBanner = document.getElementById("warningBanner");
+        const warningText = document.getElementById("warningText");
 
-            progress =
-                Math.min(Math.max(progress, 0), 100);
-
+        if (targetDays > 0 && savingPerDay > incomePerDay) {
+            warningBanner.style.display = "flex";
+            warningText.textContent =
+                "เงินออมที่ต้องเก็บต่อวัน (" + money(savingPerDay) +
+                ") มากกว่ารายรับต่อวันของคุณ ลองขยายระยะเวลา หรือลดรายจ่ายลง";
+        } else {
+            warningBanner.style.display = "none";
         }
 
 
@@ -972,63 +752,33 @@
         // Update UI
         // -----------------------------
 
-        document.getElementById("weeklyIncomeResult").textContent =
-            money(weeklyIncome);
+        document.getElementById("weeklyIncomeResult").textContent = money(incomePerDay * 7);
+        document.getElementById("dailyBudget").textContent = money(Math.max(incomePerDay - expensePerDay, 0));
+        document.getElementById("dailySaving").textContent = money(savingPerDay);
+        document.getElementById("remainingDays").textContent = targetDays.toLocaleString("th-TH") + " วัน";
 
-        document.getElementById("dailyBudget").textContent =
-            money(Math.max(remainingPerDay, 0));
+        document.getElementById("recommendedDaily").textContent = money(recommendedDaily) + " / วัน";
+        document.getElementById("incomePerDay").textContent = money(incomePerDay);
+        document.getElementById("expensePerDay").textContent = money(expensePerDay);
+        document.getElementById("weeklyRemaining").textContent = money(Math.max(weeklyRemaining, 0));
+        document.getElementById("monthlySaving").textContent = money(monthlySaving);
 
-        document.getElementById("dailySaving").textContent =
-            money(savingPerDay);
-
-        document.getElementById("remainingDays").textContent =
-            targetDays + " วัน";
-
-
-        document.getElementById("recommendedDaily").textContent =
-            money(recommendedDaily) + " / วัน";
-
-        document.getElementById("incomePerDay").textContent =
-            money(incomePerDay);
-
-        document.getElementById("expensePerDay").textContent =
-            money(dailyExpense);
-
-        document.getElementById("weeklyRemaining").textContent =
-            money(Math.max(weeklyRemaining, 0));
-
-        document.getElementById("monthlySaving").textContent =
-            money(monthlySaving);
-
-
-        document.getElementById("goalResult").textContent =
-            money(goalAmount);
-
-        document.getElementById("savingResult").textContent =
-            money(currentSaving);
-
-        document.getElementById("goalRemaining").textContent =
-            money(goalRemaining);
-
-        document.getElementById("savingPerDay").textContent =
-            money(savingPerDay) + " / วัน";
-
-        document.getElementById("progressText").textContent =
-            progress.toFixed(1) + "%";
-
-        document.getElementById("goalProgress").style.width =
-            progress + "%";
+        document.getElementById("goalResult").textContent = money(goalAmount);
+        document.getElementById("savingResult").textContent = money(currentSaving);
+        document.getElementById("goalRemaining").textContent = money(goalRemaining);
+        document.getElementById("savingPerDay").textContent = money(savingPerDay) + " / วัน";
+        document.getElementById("progressText").textContent = progress.toFixed(1) + "%";
+        document.getElementById("goalProgress").style.width = progress + "%";
 
 
         // Save settings
         localStorage.setItem(
             "moneyPlanSettings",
             JSON.stringify({
-                weeklyIncome,
-                dailyExpense,
-                goalAmount,
-                currentSaving,
-                targetDays
+                incomeAmount, incomePeriod,
+                expenseAmount, expensePeriod,
+                goalAmount, currentSaving,
+                targetAmount, targetPeriod
             })
         );
 
@@ -1040,78 +790,43 @@
     // -----------------------------
 
     function getTransactions() {
-
-        return JSON.parse(
-            localStorage.getItem("moneyPlanTransactions")
-        ) || [];
-
+        return JSON.parse(localStorage.getItem("moneyPlanTransactions")) || [];
     }
-
 
     function saveTransactions(data) {
-
-        localStorage.setItem(
-            "moneyPlanTransactions",
-            JSON.stringify(data)
-        );
-
+        localStorage.setItem("moneyPlanTransactions", JSON.stringify(data));
     }
-
 
     function addTransaction() {
 
-        const type =
-            document.getElementById("transactionType").value;
-
-        const name =
-            document.getElementById("transactionName").value.trim();
-
-        const amount =
-            Number(
-                document.getElementById("transactionAmount").value
-            );
-
+        const type = document.getElementById("transactionType").value;
+        const name = document.getElementById("transactionName").value.trim();
+        const amount = Number(document.getElementById("transactionAmount").value);
 
         if (!name) {
-
             alert("กรุณาใส่ชื่อรายการ");
             return;
-
         }
-
 
         if (!amount || amount <= 0) {
-
             alert("กรุณาใส่จำนวนเงิน");
             return;
-
         }
-
 
         const transactions = getTransactions();
 
-
         transactions.unshift({
-
             id: Date.now(),
-
             date: new Date().toLocaleDateString("th-TH"),
-
             type,
-
             name,
-
             amount
-
         });
-
 
         saveTransactions(transactions);
 
-
         document.getElementById("transactionName").value = "";
         document.getElementById("transactionAmount").value = "";
-
 
         renderHistory();
 
@@ -1125,16 +840,11 @@
     function renderHistory() {
 
         const transactions = getTransactions();
-
-        const table =
-            document.getElementById("historyTable");
-
+        const table = document.getElementById("historyTable");
 
         table.innerHTML = "";
 
-
         if (transactions.length === 0) {
-
             table.innerHTML = `
                 <tr>
                     <td colspan="4">
@@ -1145,66 +855,27 @@
                     </td>
                 </tr>
             `;
-
             updateSummary();
-
             return;
-
         }
-
 
         transactions.forEach(item => {
 
-            const isIncome =
-                item.type === "income";
-
-
-            const typeText =
-                isIncome
-                    ? "รายรับ"
-                    : "รายจ่าย";
-
-
-            const typeClass =
-                isIncome
-                    ? "success-text"
-                    : "danger-text";
-
-
-            const sign =
-                isIncome
-                    ? "+"
-                    : "-";
-
+            const isIncome = item.type === "income";
+            const typeText = isIncome ? "รายรับ" : "รายจ่าย";
+            const typeClass = isIncome ? "success-text" : "danger-text";
+            const sign = isIncome ? "+" : "-";
 
             table.innerHTML += `
-
                 <tr>
-
-                    <td class="ps-3">
-                        ${item.date}
-                    </td>
-
-                    <td>
-                        ${escapeHtml(item.name)}
-                    </td>
-
-                    <td>
-                        <span class="${typeClass}">
-                            ${typeText}
-                        </span>
-                    </td>
-
-                    <td class="text-end pe-3 ${typeClass}">
-                        ${sign}${money(item.amount)}
-                    </td>
-
+                    <td class="ps-3">${item.date}</td>
+                    <td>${escapeHtml(item.name)}</td>
+                    <td><span class="${typeClass}">${typeText}</span></td>
+                    <td class="text-end pe-3 ${typeClass}">${sign}${money(item.amount)}</td>
                 </tr>
-
             `;
 
         });
-
 
         updateSummary();
 
@@ -1217,37 +888,22 @@
 
     function updateSummary() {
 
-        const transactions =
-            getTransactions();
-
+        const transactions = getTransactions();
 
         let income = 0;
         let expense = 0;
 
-
         transactions.forEach(item => {
-
             if (item.type === "income") {
-
                 income += Number(item.amount);
-
             } else {
-
                 expense += Number(item.amount);
-
             }
-
         });
 
-
-        document.getElementById("totalIncome").textContent =
-            money(income);
-
-        document.getElementById("totalExpense").textContent =
-            money(expense);
-
-        document.getElementById("balance").textContent =
-            money(income - expense);
+        document.getElementById("totalIncome").textContent = money(income);
+        document.getElementById("totalExpense").textContent = money(expense);
+        document.getElementById("balance").textContent = money(income - expense);
 
     }
 
@@ -1258,22 +914,11 @@
 
     function clearHistory() {
 
-        if (
-            !confirm(
-                "ต้องการลบประวัติรายการทั้งหมดหรือไม่?"
-            )
-        ) {
-
+        if (!confirm("ต้องการลบประวัติรายการทั้งหมดหรือไม่?")) {
             return;
-
         }
 
-
-        localStorage.removeItem(
-            "moneyPlanTransactions"
-        );
-
-
+        localStorage.removeItem("moneyPlanTransactions");
         renderHistory();
 
     }
@@ -1284,13 +929,9 @@
     // -----------------------------
 
     function escapeHtml(text) {
-
         const div = document.createElement("div");
-
         div.textContent = text;
-
         return div.innerHTML;
-
     }
 
 
@@ -1300,37 +941,24 @@
 
     function loadSettings() {
 
-        const settings =
-            JSON.parse(
-                localStorage.getItem(
-                    "moneyPlanSettings"
-                )
-            );
-
+        const settings = JSON.parse(localStorage.getItem("moneyPlanSettings"));
 
         if (!settings) {
-
             calculate();
             return;
-
         }
 
+        document.getElementById("incomeAmount").value = settings.incomeAmount || "";
+        document.getElementById("incomePeriod").value = settings.incomePeriod || "month";
 
-        document.getElementById("weeklyIncome").value =
-            settings.weeklyIncome || "";
+        document.getElementById("expenseAmount").value = settings.expenseAmount || "";
+        document.getElementById("expensePeriod").value = settings.expensePeriod || "day";
 
-        document.getElementById("dailyExpense").value =
-            settings.dailyExpense || "";
+        document.getElementById("goalAmount").value = settings.goalAmount || "";
+        document.getElementById("currentSaving").value = settings.currentSaving || "";
 
-        document.getElementById("goalAmount").value =
-            settings.goalAmount || "";
-
-        document.getElementById("currentSaving").value =
-            settings.currentSaving || "";
-
-        document.getElementById("targetDays").value =
-            settings.targetDays || "";
-
+        document.getElementById("targetAmount").value = settings.targetAmount || "";
+        document.getElementById("targetPeriod").value = settings.targetPeriod || "day";
 
         calculate();
 
@@ -1341,16 +969,10 @@
     // Init
     // -----------------------------
 
-    document.addEventListener(
-        "DOMContentLoaded",
-        function () {
-
-            loadSettings();
-
-            renderHistory();
-
-        }
-    );
+    document.addEventListener("DOMContentLoaded", function () {
+        loadSettings();
+        renderHistory();
+    });
 
 </script>
 
